@@ -21,6 +21,7 @@ namespace Hw9
         {
             Price *= (float)tax;
         }
+
         public override string AppSystemPurpose()
         {
             return "Far away and talking close";
