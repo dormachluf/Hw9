@@ -9,14 +9,20 @@ namespace Hw9
 {
     internal class Navigation : AppSystem , Iapp
     {
-        NavigationManager manager;
+        private NavigationManager manager;
+
+        public NavigationManager Manager { 
+            get => manager;
+            set => manager = value;
+        }
+
         public void AddVat(double tax)
         {
             Price *= (float)tax;
         }
         public Navigation(NavigationManager manager,string name,float price):base (name,price)
         {
-            this.manager = manager;
+            Manager = manager;
             
         }
         public override string ToString() {

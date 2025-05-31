@@ -21,7 +21,7 @@ namespace Hw9
             Price = price;
             serial = ++Uint;
         }
-
+        public uint Serial { get;}
         public static uint Uint { get => _uint; set => _uint = value; }
         public string Name
         {
