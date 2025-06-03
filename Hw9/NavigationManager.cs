@@ -20,6 +20,9 @@ namespace Hw9
         {
             Curr_place = curr_place;
             Car = car;
+            des_place = new string[0];
+            des_num = 0;
+
         }
 
         public string Curr_place { get => curr_place; set => curr_place = value; }
@@ -27,7 +30,7 @@ namespace Hw9
         internal Cars Car { get => car; set => car = value; }
         public override string ToString()
         {
-            return $"Vehicle: {car}\nFrom: {des_place[0]}\nCurr Place: {curr_place}\nAmount of Destinations: {des_num}";
+            return $"Vehicle: {car}\nCurr Place: {curr_place}\nAmount of Destinations: {des_num}";
         }
 
         public void ShowRecentLocations()
@@ -43,8 +46,10 @@ namespace Hw9
             {
                 Array.Resize(ref des_place, des_place.Length + 1);
                 des_place[des_place.Length - 1] = addres;
-            }   
-            
+                des_num++;
+                return;
+            }
+            Console.WriteLine("Location alredy added");
         }
     }
 }

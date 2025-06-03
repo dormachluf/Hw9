@@ -46,22 +46,23 @@ namespace Hw9
             get => total_apps;
             set => total_apps = value;
         }
+        internal AppSystem[] AppSystemKatan { get => appSystemKatan;}
 
         public void AddApp(AppSystem app)
         {
-            foreach (AppSystem System in appSystemKatan)
+            foreach (AppSystem System in AppSystemKatan)
             {
                 if (System.Name == app.Name)
                 {
                     throw new ArgumentException("The app is all ready installed");
                 }
             }
-            Array.Resize(ref appSystemKatan, appSystemKatan.Length + 1);
-            appSystemKatan[appSystemKatan.Length - 1] = app;
+            Array.Resize(ref appSystemKatan, AppSystemKatan.Length + 1);
+            AppSystemKatan[AppSystemKatan.Length - 1] = app;
         }
         public void showListAppNavigation()
         {
-            foreach (AppSystem app in appSystemKatan)
+            foreach (AppSystem app in AppSystemKatan)
             {
                 if (app is Navigation nav_app)
                     Console.WriteLine($"App name: {nav_app.Name} App seiral num: {nav_app.Serial}");
@@ -69,23 +70,23 @@ namespace Hw9
         }
         public override string ToString()
         {
-            string apps_name = null;
-            foreach (AppSystem app in appSystemKatan)
+            string apps = null;
+            foreach (AppSystem app in AppSystemKatan)
             {
-                apps_name += $"the name of the app is: {app.Name}\n";
+                apps += app;
             }
             return $"user name: {User_name}\npassword: {Password}\nis the user logged in: {Is_active}\napp installed: {Total_apps}\n" +
-                $"the amount of login attempts: {Connect_num}\nAPPS:\n{apps_name}";
+                $"the amount of login attempts: {Connect_num}\nAPPS:\n{apps}";
         }
         public Navigation PopularNavigationApp()
         {
             Navigation highest = null;
 
-            foreach (AppSystem app in appSystemKatan)
+            foreach (AppSystem app in AppSystemKatan)
             {
                 if (app is Navigation nav_app)
                 {
-                    if (highest.Manager.Des_place.Length < nav_app.Manager.Des_place.Length || highest == null)
+                    if (highest == null || highest.Manager.Des_place.Length < nav_app.Manager.Des_place.Length )
                     {
                         highest = nav_app;
                     }

@@ -6,21 +6,33 @@ using System.Threading.Tasks;
 
 namespace Hw9
 {
-    internal class Program
+    internal class Program 
     {
+        const double nav_tax = 1.12;
+        const double soc_tax = 1.13;
 
         static void Main(string[] args)
         {
-            const double nav_tax = 1.12;
-            const double soc_tax = 1.13;
-            Console.Write("Please enter your desired username: ");
-            string user_name = Console.ReadLine();
-            Console.Write("Please enter your desired password: ");
-            string pass = Console.ReadLine();
-            MobileDevice my_device = new MobileDevice(user_name, pass);
+            MobileDevice my_device = null;
+            while (true) {
+                Console.Write("Please enter your desired username: ");
+                string user_name = Console.ReadLine();
+                Console.Write("Please enter your desired password: ");
+                string pass = Console.ReadLine();
 
-            // System.Threading.Thread.Sleep(15000);
+                // System.Threading.Thread.Sleep(15000);
+                try {
+                    my_device = new MobileDevice(user_name, pass);
+                    break;
+                }
+                catch (ArgumentException ex) {
+                    Console.WriteLine(ex.Message);
+                    System.Threading.Thread.Sleep(2000);
+                    Console.Clear();
+                }
+            }
             Login(my_device);
+
             bool is_running = true;
             while (is_running)
             {
@@ -48,7 +60,13 @@ namespace Hw9
                         string selction = Console.ReadLine();
                         if (selction == "1" || selction == "2")
                         {
-                            my_device.AddApp(MakeApp(selction));
+                            try {
+                                MakeApp(ref my_device, selction);
+                            }
+                            catch (ArgumentException ex) {
+                                Console.WriteLine(ex.Message);
+                            }
+                            
                         }
                         break;
                     case "2":
@@ -56,7 +74,8 @@ namespace Hw9
                         Console.WriteLine(my_device.PopularNavigationApp());
                         break;
                     case "3":
-                        Console.WriteLine("\nStarting navigation...");
+                        Console.Clear();
+                        AddLocation(my_device);
                         break;
                     case "4":
                         Console.Clear();
@@ -84,7 +103,28 @@ namespace Hw9
             }
         }
 
-        private static AppSystem MakeApp(string selction)
+        private static void AddLocation(MobileDevice my_device) {
+            bool is_found = false;
+            my_device.showListAppNavigation();
+
+            Console.WriteLine("Enter the name of the app you want to use.");
+            string use_name = Console.ReadLine();
+
+            foreach (AppSystem app in my_device.AppSystemKatan) {
+                if (use_name == app.Name) {
+                    Console.WriteLine(((Navigation)app).Manager);
+
+                    Console.Write("Please enter where you wanna go: ");
+                    ((Navigation)app).Manager.AddAddress(Console.ReadLine());
+                    is_found = true;
+                    Console.WriteLine("Have a safe drive!");
+                }
+            }
+            if (!is_found)
+                Console.WriteLine("No nav app with this name");
+        }
+
+        private static void MakeApp(ref MobileDevice my_device,string selction)
         {
             AppSystem app = null;
 
@@ -100,6 +140,7 @@ namespace Hw9
 
             if (selction == "1")
             {
+                
                 Console.WriteLine("\n----------------------------");
                 Console.WriteLine(" Select Type of Vehicle");
                 Console.WriteLine("----------------------------");
@@ -119,6 +160,8 @@ namespace Hw9
 
                     NavigationManager navm = new NavigationManager(car, curr_location);
                     app = new Navigation(navm, name, price);
+                    ((Navigation)app).AddVat(nav_tax);
+                    my_device.AddApp(app);
                 }
                 else
                 {
@@ -140,6 +183,10 @@ namespace Hw9
                     int rating = int.Parse(Console.ReadLine());
 
                     app = new Social(is_corp, rating, name, price);
+                    ((Social)app).AddVat(soc_tax);
+                    my_device.AddApp(app);
+
+
                 }
                 catch (ArgumentException ex)
                 {
@@ -148,9 +195,10 @@ namespace Hw9
                 catch (Exception ex)
                 {
                     Console.WriteLine("[Error] Please enter valid input.");
+
                 }
+
             }
-            return app;
         }
 
         private static void Login(MobileDevice my_device)

@@ -21,7 +21,7 @@ namespace Hw9
             Price = price;
             serial = ++Uint;
         }
-        public uint Serial { get;}
+        public uint Serial { get => serial;}
         public static uint Uint { get => _uint; set => _uint = value; }
         public string Name
         {
@@ -48,7 +48,7 @@ namespace Hw9
 
         public override string ToString()
         {
-            return $"App name: {Name}\nSerial num: {serial}\nApp price: {Price}\nDate of installing: {date}";
+            return $"App name: {Name}\nSerial num: {serial}\nApp price: {Price}\nDate of installing: {date}\n\n";
         }
         public abstract string AppSystemPurpose();
 
